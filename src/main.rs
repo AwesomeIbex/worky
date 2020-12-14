@@ -8,7 +8,7 @@ use rand::distributions::Alphanumeric;
 use std::path::PathBuf;
 
 mod cli;
-
+mod event;
 
 ///
 /// User will pass in a command file, this could be a raw file or a location to the file
@@ -34,10 +34,16 @@ fn main() {
     }
     fs::create_dir_all(&path);
 
-    println!("path {:?}", path);
+    // file events
     let (watcher_tx, watcher_rx) = channel();
     let mut watcher = watcher(watcher_tx, Duration::from_millis(300)).unwrap(); //TODO test delay
     watcher.watch(&path, RecursiveMode::Recursive).unwrap();
+
+    // tokio
+    let (tokio_tx, tokio_rx) = std::sync::mpsc::channel();
+    std::thread::spawn(move || {
+        event::start_tokio(tokio_rx);
+    });
 
     loop {
         match watcher_rx.recv() {
@@ -52,8 +58,10 @@ fn main() {
                         dir_string.push_str(&started_prefix);
 
                         // updates postfix to show its started
-                        fs::rename(dir, PathBuf::from(&dir_string));
+                        let started_path = PathBuf::from(&dir_string);
+                        fs::rename(dir, &started_path);
                         // worker sends path to tokio loop to handle
+                        tokio_tx.send(started_path);
                         // waits for completion
                         // updates postfix to show finished
                         // exits the program
@@ -64,6 +72,6 @@ fn main() {
             },
             Err(e) => { println!("Error {}", e) },
         }
-    }
-    fs::remove_dir_all(&path);
+    };
+    // fs::remove_dir_all(&path);
 }
