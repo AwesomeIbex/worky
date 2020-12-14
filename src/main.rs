@@ -51,17 +51,19 @@ fn main() {
                 match event {
                     // new job gets written to workers directory
                     // worker receives event
-                    DebouncedEvent::Create(dir) => {
-                        println!("File created at {:?}", dir.to_str());
-                        let mut dir_string = dir.to_str().unwrap().to_string();
-                        let mut started_prefix = String::from("_STARTED");
-                        dir_string.push_str(&started_prefix);
-
-                        // updates postfix to show its started
-                        let started_path = PathBuf::from(&dir_string);
-                        fs::rename(dir, &started_path);
+                    DebouncedEvent::Create(event_path) => {
+                        println!("File created at {:?}", event_path.to_str());
+                        // let mut dir_string = event_path.to_str().unwrap().to_string();
+                        // let last_directory = dir_string.split("/").collect::<Vec<&str>>();
+                        // println!("last directories {:#?}", last_directory);
+                        // let mut started_prefix = String::from("_STARTED");
+                        // dir_string.push_str(&started_prefix);
+                        //
+                        // // updates postfix to show its started
+                        // let started_path = PathBuf::from(&dir_string);
+                        // fs::rename(event_path, &started_path);
                         // worker sends path to tokio loop to handle
-                        tokio_tx.send(started_path);
+                        tokio_tx.send(event_path);
                         // waits for completion
                         // updates postfix to show finished
                         // exits the program
