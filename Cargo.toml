@@ -16,3 +16,4 @@ fs_extra = "1.2.0"
 rayon = "1.5.0"
 tokio = { version = "0.3", features = ["macros", "rt-multi-thread"] }
 shellfn = "0.1.1"
+ctrlc = "3.1.7"

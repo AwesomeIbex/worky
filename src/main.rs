@@ -34,10 +34,16 @@ fn main() {
     }
     fs::create_dir_all(&path);
 
+    let path_copy = path.clone();
+    ctrlc::set_handler(move || {
+        println!("Closing application, deregistering worker..");
+        fs::remove_dir_all(&path_copy);
+    }).expect("Error setting Ctrl-C handler");
+
     // file events
     let (watcher_tx, watcher_rx) = channel();
     let mut watcher = watcher(watcher_tx, Duration::from_millis(300)).unwrap(); //TODO test delay
-    watcher.watch(&path, RecursiveMode::Recursive).unwrap();
+    watcher.watch(&path, RecursiveMode::NonRecursive).unwrap();
 
     // tokio
     let (tokio_tx, tokio_rx) = std::sync::mpsc::channel();
@@ -56,7 +62,7 @@ fn main() {
                         tokio_tx.send(event_path);
                         // waits for completion
                         // updates postfix to show finished
-                        // exits the program
+                        // exits the program if not persistent
                     }
                     DebouncedEvent::Error(_, _) => {} // Log
                     _ => {} // Log
@@ -65,5 +71,8 @@ fn main() {
             Err(e) => { println!("Error {}", e) },
         }
     };
+    //handle deregistering workers
+    // ctrl + c
+    // crashes
     // fs::remove_dir_all(&path);
 }
