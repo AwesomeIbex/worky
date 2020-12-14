@@ -6,6 +6,7 @@ use std::fs;
 use rand::Rng;
 use rand::distributions::Alphanumeric;
 use std::path::PathBuf;
+use std::process::exit;
 
 mod cli;
 mod event;
@@ -38,6 +39,7 @@ fn main() {
     ctrlc::set_handler(move || {
         println!("Closing application, deregistering worker..");
         fs::remove_dir_all(&path_copy);
+        exit(0);
     }).expect("Error setting Ctrl-C handler");
 
     // file events
