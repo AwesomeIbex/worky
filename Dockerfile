@@ -20,7 +20,7 @@ COPY . .
 
 RUN cargo build --release
 
-RUN cargo install --path .iclo
+RUN cargo install --path .
 
 # ------------------------------------------------------------------------------
 # Final Stage
