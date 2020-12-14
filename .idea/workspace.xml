@@ -10,10 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52533e1c-ad9b-44af-a87c-293ffd8631d2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/event/shell.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example.sh" beforeDir="false" afterPath="$PROJECT_DIR$/example.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/event.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/event.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
