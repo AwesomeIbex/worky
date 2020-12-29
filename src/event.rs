@@ -21,9 +21,9 @@ pub async fn start_tokio(path_rx: std::sync::mpsc::Receiver<PathBuf>) {
                 let mut log_file = event_path.clone().to_str().unwrap().to_string();
                 log_file.push_str("/");
                 log_file.push_str("logs");
+                log::debug!("Creating log file at {}", log_file);
                 let mut file = std::fs::File::create(log_file).unwrap();
                 let mut file = LineWriter::new(file);
-
                 let dir = event_path.to_str().expect("Failed to write event path to a string");
                 shell::run_directory(dir)
                     .expect("Failed to run script in directory")
