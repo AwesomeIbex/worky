@@ -1,5 +1,5 @@
+use std::io::{IoSlice, LineWriter, Write};
 use std::path::PathBuf;
-use std::io::{Write, IoSlice, LineWriter};
 
 mod shell;
 
@@ -24,11 +24,14 @@ pub async fn start_tokio(path_rx: std::sync::mpsc::Receiver<PathBuf>) {
                 let mut file = std::fs::File::create(log_file).unwrap();
                 let mut file = LineWriter::new(file);
 
-                shell::run_directory(event_path.to_str().unwrap()).unwrap().for_each(|line| {
-                    let mut line = line;
-                    line.push_str("\n");
-                    file.write(line.as_bytes());
-                })
+                let dir = event_path.to_str().expect("Failed to write event path to a string");
+                shell::run_directory(dir)
+                    .expect("Failed to run script in directory")
+                    .for_each(|line| {
+                        let mut line = line;
+                        line.push_str("\n");
+                        file.write(line.as_bytes());
+                    })
             }
         }
     };
