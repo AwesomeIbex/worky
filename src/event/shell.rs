@@ -10,10 +10,9 @@ pub fn run_directory(dir: &str) -> Result<impl Iterator<Item=String>, Box<Error>
     ./*.sh >> logs
 "# }
 #[shell]
-pub fn run_file(file: &str) -> Result<impl Iterator<Item=String>, Box<Error>> { r#"
+pub fn run_file_bash(file: &str) -> Result<impl Iterator<Item=String>, Box<Error>> { r#"
     echo "Running $FILE"
     exec $FILE
 "# }
-
 
 //TODO can support python too
